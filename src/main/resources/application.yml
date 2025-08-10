@@ -1,10 +1,9 @@
 spring:
   application:
     name: RedisStudy
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
 
   session:
     store-type: redis
@@ -19,3 +18,29 @@ spring:
 
   cache: #캐시 사용
     type: redis
+
+server:
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
+
+
+--- #dev
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true        #SQL 쿼리 출력
+    properties:
+      hibernate:
+        format_sql: true  #SQL 쿼리를 가독성 좋게 줄바꿈 및 들여쓰기해서 포맷팅
