@@ -1,11 +1,14 @@
 package org.example.redisstudy.entity;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.redisstudy.entity.enums.Role;
 
+import java.time.ZonedDateTime;
+
+import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -31,7 +34,12 @@ public class User extends BaseEntity {
 
     private boolean isDeleted;
 
-    public static User create(Long id, String userId, String password, String nickname) {
-        return new User(id, userId, password, nickname, true, false);
+    @Enumerated(STRING)
+    private Role role;
+
+    private ZonedDateTime lastLoginAt;
+
+    public static User create(Long id, String userId, String password, String nickname, Role role) {
+        return new User(id, userId, password, nickname, true, false, role, null);
     }
 }

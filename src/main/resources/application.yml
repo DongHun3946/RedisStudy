@@ -4,27 +4,30 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
 
-
+  # session 설정(redis)
   session:
     store-type: redis
     redis:
-      namespace: "spring:session:myapp"
+      namespace: "spring:session"
   data:
     redis:
-      host: localhost
-      port: 6379
-      password: ${REDIS_PASSWORD}
-      database: 1 #세션 전용 DB
+      cluster:
+        nodes:
+          - localhost:7001
+          - localhost:7002
+          - localhost:7003
 
-  cache: #캐시 사용
+  # 캐시 사용
+  cache:
     type: redis
 
+# session 설정
 server:
   servlet:
     session:
       cookie:
-        name: JSESSIONID
-
+        name: JSESSIONID # session 이름 설정
+      timeout: 60m       # session 만료시간 설정
 
 --- #dev
 spring:
@@ -33,7 +36,7 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/redis
     username: postgres
     password: postgres
 
@@ -44,3 +47,4 @@ spring:
     properties:
       hibernate:
         format_sql: true  #SQL 쿼리를 가독성 좋게 줄바꿈 및 들여쓰기해서 포맷팅
+    open-in-view: false

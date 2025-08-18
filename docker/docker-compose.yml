@@ -1,0 +1,24 @@
+version: "3"
+services:
+  redis-node-1:
+    image: redis:7.0
+    command: ["redis-server", "--port 7001", "--cluster-enabled yes", "--cluster-config-file nodes.conf", "--cluster-node-timeout 5000", "--appendonly yes"]
+    ports:
+      - "7001:7001"
+
+  redis-node-2:
+    image: redis:7.0
+    command: ["redis-server", "--port 7002", "--cluster-enabled yes", "--cluster-config-file nodes.conf", "--cluster-node-timeout 5000", "--appendonly yes"]
+    ports:
+      - "7002:7002"
+
+  redis-node-3:
+    image: redis:7.0
+    command: ["redis-server", "--port 7003", "--cluster-enabled yes", "--cluster-config-file nodes.conf", "--cluster-node-timeout 5000", "--appendonly yes"]
+    ports:
+      - "7003:7003"
+
+# "--cluster-enabled yes" : 클러스터 모드로 실행할지 여부
+# "--cluster-config-file nodes.conf" : 클러스터 노드의 메타데이터를 저장하는 파일(직접 수정하면 안됨)(노드가 재시작될 때 이 파일을 읽어 클러스터 상태를 복원)
+# "--cluster-node-timeout 5000" : 클러스터에서 노드 간 헬스체크 타임아웃 설정(5000ms 동안 응답이 없으면 해당 노드를 다운된 것으로 간주 -> failover 절차 시작)
+# "--appendonly yes" : AOF 기능 활성화 -> 데이터 영속성 보장
